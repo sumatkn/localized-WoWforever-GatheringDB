@@ -1,0 +1,36 @@
+name: Refresh ForeverDB skinning data
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Python version
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Fetch ForeverDB data privately
+        env:
+          FOREVERDB_API_KEY: ${{ secrets.FOREVERDB_API_KEY }}
+        run: |
+          if [ -z "$FOREVERDB_API_KEY" ]; then
+            echo 'Missing FOREVERDB_API_KEY repository Actions secret' >&2
+            exit 1
+          fi
+          python scripts/sync_foreverdb.py --output generated
+          cp generated/LocalizedGatheringDB/Data.lua LocalizedGatheringDB/Data.lua
+      - name: Commit validated database
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated/skinning.json LocalizedGatheringDB/Data.lua
+          if ! git diff --cached --quiet; then
+            git commit -m "Update skinning records from ForeverDB API"
+            git push
+          fi
