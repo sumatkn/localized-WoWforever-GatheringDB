@@ -2,7 +2,7 @@
 
 A proposed lightweight, localized/offline gathering database for **World of Warcraft: Forever**, beginning with skinning data (leather, hides, scales), intended for use by addons or Glimpse-compatible imports.
 
-**Status:** Public project proposal; **ForeverDB API access is pending**. There is no bundled ForeverDB dataset or active API integration yet.
+**Status:** Public project proposal; **ForeverDB API access is approved**. There is no bundled ForeverDB dataset or active API integration yet.
 
 ## Public project page
 
@@ -76,3 +76,56 @@ Run this only in a trusted environment after your key has been approved. Future 
 This is currently a proposal and attribution-compliant public landing page, **not a completed gathering database**. Track work or contact the maintainer through [GitHub Issues](https://github.com/sumatkn/localized-WoWforever-GatheringDB/issues).
 
 This is an independent community project and is not affiliated with Blizzard Entertainment or ForeverDB.net.
+
+---
+
+## Database pipeline (implementation)
+
+The project now includes a no-dependencies Python extractor, validation tests, a generated offline Lua database, a tiny WoW: Forever tooltip addon and an optional Glimpse import bridge. This is **code ready for an authenticated sync**, not a claim that the real ForeverDB records have already been downloaded. No secrets are stored in the repository.
+
+**Source:** <a href="https://foreverdb.net">Data from ForeverDB.net</a>
+
+### Initial sync on your own PC
+
+Run in PowerShell after cloning the repository. The key is a secret environment variable, not stored in a file or command-line argument:
+
+```powershell
+$env:FOREVERDB_API_KEY = Read-Host 'ForeverDB API key'
+python .\scripts\sync_foreverdb.py --inspect
+python .\scripts\sync_foreverdb.py --output generated
+Copy-Item .\generated\LocalizedGatheringDB\Data.lua .\LocalizedGatheringDB\Data.lua -Force
+Remove-Item Env:FOREVERDB_API_KEY
+```
+
+The first command prints only **field names** to confirm the current API structure. The second fetches all identified skinning zones and will **refuse to overwrite data if it cannot recognize records**. This matters because ForeverDB documents what its endpoints return conceptually but does not publish a complete JSON response schema in the developer guide.
+
+Alternatively, set a private GitHub Actions repository secret called `FOREVERDB_API_KEY` under **Settings → Secrets and variables → Actions**. Then open **Actions → Refresh ForeverDB skinning data → Run workflow**. The workflow runs tests, fetches records using the secret, and commits **normalized data only** if valid. It is manual rather than scheduled to avoid unwanted API use.
+
+The personal-use API key is used only in a private build-time HTTP request, never in the public GitHub Pages site or the client addon. Data is refreshed manually and bundled offline.
+
+### In-game tooltips
+
+Install the `LocalizedGatheringDB` folder from this repository into the WoW: Forever `Interface/AddOns` folder. It works alongside Glimpse and NetherUI; no other addon is required for the core functionality. It renders:
+
+- On beasts: **Skinning yields**, sourced from the local database.
+- On leather, hide, and scales: **creature names, levels, and zones** as a reverse lookup.
+- A visible attribution line on each relevant tooltip.
+
+Commands: `/lgdb stats`, `/lgdb on`, `/lgdb off`.
+
+### Glimpse interoperability
+
+The optional `/lgdb import` path uses **GlimpseDB:RegisterImportConverter** and **GlimpseDB:Import** to import *measured* attempt/hit/quantity counters when the source actually supplies them. If ForeverDB supplies only the list of possible yields and creature levels, the bridge **does not fabricate attempts or percentages**. In that situation the local tooltip addon still shows all known sources; Glimpse's observation counters remain your actual recorded results.
+
+Glimpse records creature level names in its own SavedVariables and does not expose a separate field for a static possible-drop table. Injecting chance-free reference data into its statistics would otherwise create misleading 100% drop rates. We therefore keep reference records separate rather than corrupting Glimpse's observed statistics.
+
+### Data, provenance, and limits
+
+- Only normalized material IDs, creature IDs, names, level ranges, zone IDs, required Skinning skill and documented possibilities are released.
+- No raw API JSON, user data, keys, API watermarks, or HTTP headers are committed.
+- A chance is only retained when the source explicitly provides one. Recorded counts are only retained when the API provides a coherent measured attempts/hits/quantity triple.
+- All results are attributed to ForeverDB and must not be resold or misrepresented.
+- The sync is limited to fewer than 30 requests per minute and handles 429/Retry-After; it stops on authentication or quota errors.
+- The source provider's game-build information is included when available.
+
+Run the converter's offline tests with `python -m unittest discover -s tests -v`. The test fixture contains **fictional example NPC IDs**, not verified gameplay data, and is never included in the released database.
