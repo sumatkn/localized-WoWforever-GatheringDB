@@ -1,0 +1,12 @@
+{
+  "meta": {"data": {"build": "TEST_FIXTURE_ONLY"}},
+  "summary": {"data": {"zones": [{"id": 1413, "name": "The Barrens"}]}},
+  "zones": [
+    {"id": 1413, "name": "The Barrens", "response": {"data": {"beasts": [
+      {"npcId": 50001, "name": "Example Raptor", "level": 16, "requiredSkinningSkill": 80,
+       "skinning": [{"itemId": 2318, "name": "Light Leather"}, {"itemId": 783, "name": "Light Hide"}]},
+      {"npcId": 50002, "name": "Example Boar", "minLevel": 17, "maxLevel": 18,
+       "materials": [{"itemId": 2318, "name": "Light Leather", "attempts": 40, "hits": 29, "totalQuantity": 32}]}
+    ]}}}
+  ]
+}
