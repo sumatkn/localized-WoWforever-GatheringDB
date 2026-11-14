@@ -1,0 +1,10 @@
+## Interface: 16001
+## Title: Localized GatheringDB (Forever)
+## Notes: Offline skinning material and creature tooltips. Data from ForeverDB.net (https://foreverdb.net)
+## Author: sumatkn / community project
+## Version: 0.1.0
+## OptionalDeps: Glimpse, Glimpse_Gathering, NetherUI
+## SavedVariables: LocalizedGatheringDBSettings
+Data.lua
+GlimpseImport.lua
+Tooltip.lua
