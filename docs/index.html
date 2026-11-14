@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A public project proposal for an offline, localized World of Warcraft: Forever gathering database, with documented ForeverDB API attribution and compliance.">
+  <meta name="theme-color" content="#111a25">
+  <title>Localized WoW Forever GatheringDB</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background:#101823; color:#ecf2f4; }
+    * {box-sizing:border-box} body {margin:0; line-height:1.65}
+    a {color:#8fded8;text-underline-offset:3px} a:hover{color:#c2f4eb}
+    a:focus-visible{outline:2px solid #f6c877;outline-offset:4px;border-radius:3px}
+    .wrap{max-width:1000px;margin:auto;padding:0 24px}
+    header {background:#152130;border-bottom:1px solid #344657}
+    header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:16px;padding-bottom:16px}
+    .brand{font-weight:750;letter-spacing:.025em;color:#f3f5f3}
+    nav{display:flex;gap:18px;flex-wrap:wrap;font-size:.92rem}
+    main{padding-top:56px;padding-bottom:72px}
+    .eyebrow{letter-spacing:.14em;text-transform:uppercase;color:#96b6bd;font-size:.75rem;font-weight:700}
+    h1 {font-size:clamp(2rem,5vw,3.5rem);line-height:1.12;letter-spacing:-.035em;max-width:760px;margin:12px 0 22px}
+    h2{font-size:1.28rem;line-height:1.3;margin:0 0 13px;color:#f4e2bf}
+    p{margin:0 0 14px} .lead{font-size:1.12rem;max-width:750px;color:#c7d4d9}
+    .status{display:inline-block;border:1px solid #42665e;border-radius:999px;background:#19322e;color:#addbd0;padding:5px 13px;margin-bottom:18px;font-size:.83rem;font-weight:650}
+    .button{display:inline-block;background:#b9dcd3;color:#101823;text-decoration:none;font-weight:750;border-radius:9px;padding:10px 17px;margin:8px 10px 4px 0}
+    .button:hover{color:#101823;background:#e6f8f2}
+    .button.secondary{background:transparent;color:#d0e6e6;border:1px solid #607684}
+    .button.secondary:hover{color:#fff;border-color:#a9c9ce}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:44px}
+    article,section.panel{padding:26px;border-radius:12px;background:#172534;border:1px solid #314351}
+    article p:last-child,section.panel p:last-child{margin-bottom:0}
+    section.panel{margin-top:22px}
+    ul{padding-left:20px;margin:0} li+li{margin-top:8px}
+    code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#cfdeaa;font-size:.9em}
+    .credit{display:inline-block;font-weight:700;font-size:1.08rem;margin:3px 0 9px}
+    .subtle{color:#b0c2cb;font-size:.9rem}
+    footer{border-top:1px solid #344657;background:#152130;padding:25px 0;color:#bdcdd3;font-size:.92rem}
+    footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">Localized WoW Forever GatheringDB</div>
+      <nav aria-label="Main navigation">
+        <a href="#project">Project</a>
+        <a href="#data">Data source &amp; credit</a>
+        <a href="#compliance">API compliance</a>
+        <a href="https://github.com/sumatkn/localized-WoWforever-GatheringDB">GitHub repository</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="status">Public project proposal · API access pending</div>
+    <div class="eyebrow">Community tooling for World of Warcraft: Forever</div>
+    <h1>Gathering information, available offline and right in your tooltips.</h1>
+    <p class="lead">A planned lightweight, locally packaged gathering database for WoW: Forever. The initial focus is <strong>Skinning</strong>: showing what a beast can yield, and reversing that lookup to show which creature levels and zones can produce leather, hides, or scales.</p>
+    <a class="button" href="https://github.com/sumatkn/localized-WoWforever-GatheringDB">View the project</a>
+    <a class="button secondary" href="https://foreverdb.net/developers">ForeverDB API documentation</a>
+
+    <div class="cards" id="project">
+      <article>
+        <h2>Creature → material</h2>
+        <p>Show possible skinning yields, required skill, creature level, and source location in an in-game tooltip where supported by the dataset.</p>
+      </article>
+      <article>
+        <h2>Material → creature</h2>
+        <p>Hover over Light Leather, hides, or scales to find the relevant beasts, level ranges, and zones without opening a separate database website.</p>
+      </article>
+      <article>
+        <h2>Offline, localized data</h2>
+        <p>Transform approved API responses into a small local dataset, initially targeting Glimpse-compatible imports or standalone WoW addon data. No live API calls from the game client.</p>
+      </article>
+    </div>
+
+    <section class="panel" id="data" aria-labelledby="data-title">
+      <h2 id="data-title">Data source &amp; attribution</h2>
+      <p>The proposed upstream source is the <a href="https://foreverdb.net/developers">ForeverDB API</a>, specifically its WoW: Forever gathering endpoints. This is a credit and usage declaration, <strong>not</strong> a claim that API access or a dataset has already been granted.</p>
+      <p class="credit"><a href="https://foreverdb.net">Data from ForeverDB.net</a></p>
+      <p class="subtle">This visible link is the required ForeverDB free-tier attribution. When data is displayed in future websites, tooltips, apps, or releases, attribution will accompany it rather than appearing only on this landing page. ForeverDB data will not be sold or represented as original project data.</p>
+    </section>
+
+    <section class="panel" id="compliance" aria-labelledby="compliance-title">
+      <h2 id="compliance-title">ForeverDB API usage and compliance</h2>
+      <ul>
+        <li><strong>Approval first:</strong> the maintainer will request API access through a ForeverDB account, provide this public project URL, a contact email, and agree to the source-credit terms.</li>
+        <li><strong>Correct key scope:</strong> API access is for a build-time data tool, not for the public webpage and not for a key distributed with a WoW addon. No website or plugin key will be reused outside its permitted scope.</li>
+        <li><strong>Credentials remain private:</strong> keys are never committed, bundled into addon releases, exposed in browser JavaScript, or included in public exports.</li>
+        <li><strong>Limits:</strong> free-tier usage is capped at 5,000 requests per day and 30 per minute across the account; requests will handle <code>429</code> and <code>Retry-After</code> and will not attempt to evade limits.</li>
+        <li><strong>Request identity:</strong> the build-time client will use the <code>X-API-Key</code> header (or documented Bearer authorization) and an identifying <code>User-Agent</code>.</li>
+        <li><strong>Data integrity:</strong> retain provenance and game-build metadata; distinguish observed Forever results from Classic-derived or uncertain data; do not fabricate probabilities or observation counts.</li>
+        <li><strong>Redistribution:</strong> include visible ForeverDB credit and do not resell, misattribute, or redistribute API credentials. Future releases will respect any additional terms attached to the approved key.</li>
+      </ul>
+    </section>
+
+    <section class="panel" aria-labelledby="status-title">
+      <h2 id="status-title">Development status</h2>
+      <p>This page documents the intended use for an API access request. The importer, schema conversion, and in-game integration are planned; the site does not request or serve ForeverDB API data, nor does it collect visitors' data.</p>
+      <p>Project discussion and progress: <a href="https://github.com/sumatkn/localized-WoWforever-GatheringDB/issues">GitHub Issues</a>.</p>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">
+      <span><a href="https://foreverdb.net">Data from ForeverDB.net</a></span>
+      <span>Independent community project. Not affiliated with Blizzard Entertainment or ForeverDB.net.</span>
+    </div>
+  </footer>
+</body>
+</html>
