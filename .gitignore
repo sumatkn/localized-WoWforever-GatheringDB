@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+*.key
+*.secret
+*.log
+_local/
+_cache/
+*.raw.json
