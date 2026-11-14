@@ -23,6 +23,7 @@ jobs:
             echo 'Missing FOREVERDB_API_KEY repository Actions secret' >&2
             exit 1
           fi
+          python scripts/sync_foreverdb.py --inspect
           python scripts/sync_foreverdb.py --output generated
           cp generated/LocalizedGatheringDB/Data.lua LocalizedGatheringDB/Data.lua
       - name: Commit validated database
