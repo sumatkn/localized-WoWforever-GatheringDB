@@ -140,7 +140,7 @@ def parse_material(material):
         return None
     wrapped = one(material, "item", "material", "yield")
     wrapper = wrapped if isinstance(wrapped, dict) else {}
-    itemid = as_id(one(material, "itemId", "itemID", "materialId", "materialID"))
+    itemid = as_id(one(material, "itemId", "itemID", "materialId", "materialID", "id"))
     if itemid is None:
         itemid = as_id(one(wrapper, "itemId", "id", "itemID"))
     name = as_text(one(material, "itemName", "materialName", "name", "label")) or as_text(one(wrapper, "name", "itemName"))
@@ -198,6 +198,12 @@ def collect_beasts(response):
             nested = data.get(section)
             if isinstance(nested, dict):
                 candidates.extend(list_at(nested, ("beasts", "creatures", "mobs", "npcs", "results")))
+    # ForeverDB skinning zone detail keeps beasts inside data.zones[*].beasts.
+    # The API retains the same top-level keys in summary and filtered responses.
+    if isinstance(data, dict):
+        for zone in list_at(data, ("zones", "areas", "locations")):
+            if isinstance(zone, dict):
+                candidates.extend(list_at(zone, ("beasts", "creatures", "mobs", "npcs", "skinnableCreatures", "results", "entries")))
     return [x for x in candidates if isinstance(x, dict)]
 
 
@@ -211,7 +217,7 @@ def npc_identity(beast):
     lmin, lmax = level_range(beast)
     if lmin is None:
         lmin, lmax = level_range(npc)
-    skill = nonnegative_int(one(beast, "requiredSkinningSkill", "skinningSkill", "requiredSkill", "skillRequired"))
+    skill = nonnegative_int(one(beast, "requiredSkinningSkill", "skinningSkill", "requiredSkill", "skillRequired", "skill"))
     return npc_id, name, lmin, lmax, skill
 
 
@@ -368,6 +374,16 @@ def run():
                 print("First zone object keys:", list(z0) if isinstance(z0, dict) else type(z0).__name__)
                 if isinstance(z0, dict):
                     print("First zone beast keys:", list(z0.get("beasts", [{}])[0]) if isinstance(z0.get("beasts"), list) and z0.get("beasts") and isinstance(z0["beasts"][0], dict) else [])
+                    example_beast = next((x for x in z0.get("beasts", []) if isinstance(x, dict) and x.get("gives")), None)
+                    if example_beast:
+                        gives = example_beast["gives"]
+                        print("Example gives type:", type(gives).__name__)
+                        print("Example gives length:", len(gives) if hasattr(gives, "__len__") else -1)
+                        if isinstance(gives, list) and gives:
+                            print("Example gives first entry type:", type(gives[0]).__name__)
+                            print("Example gives first entry keys:", list(gives[0]) if isinstance(gives[0], dict) else [])
+                        elif isinstance(gives, dict):
+                            print("Example gives keys:", list(gives)[:12])
                     print("First zone nested fields:", {k: ("list of "+str(len(v)) if isinstance(v, list) else type(v).__name__) for k,v in z0.items()})
             print("ID probe zone matches:", [(zone_identity(z)[0], zone_identity(z)[1]) for z in zone_entries[:3] if isinstance(z, dict)])
             if ids[next(iter(ids))] and not collect_beasts(probe):
