@@ -2,7 +2,7 @@
 
 A proposed lightweight, localized/offline gathering database for **World of Warcraft: Forever**, beginning with skinning data (leather, hides, scales), intended for use by addons or Glimpse-compatible imports.
 
-**Status:** Public project proposal; **ForeverDB API access is approved**. There is no bundled ForeverDB dataset or active API integration yet.
+**Status (2026-11-15):** ForeverDB API access approved and first live sync **successful**. The repository now contains **717 creature records and 37 material IDs across 46 zones**. The generated data is available as [normalized JSON](generated/skinning.json) and [offline WoW Lua](LocalizedGatheringDB/Data.lua). In-game behavior is not yet independently verified.
 
 ## Public project page
 
@@ -73,7 +73,7 @@ Run this only in a trusted environment after your key has been approved. Future 
 
 ## Project status and contact
 
-This is currently a proposal and attribution-compliant public landing page, **not a completed gathering database**. Track work or contact the maintainer through [GitHub Issues](https://github.com/sumatkn/localized-WoWforever-GatheringDB/issues).
+The first API-backed skinning dataset is now available. The in-game tooltip addon and optional Glimpse bridge are provided as experimental integrations; in-game compatibility still needs testing. Track work or contact the maintainer through [GitHub Issues](https://github.com/sumatkn/localized-WoWforever-GatheringDB/issues).
 
 This is an independent community project and is not affiliated with Blizzard Entertainment or ForeverDB.net.
 
@@ -81,7 +81,7 @@ This is an independent community project and is not affiliated with Blizzard Ent
 
 ## Database pipeline (implementation)
 
-The project now includes a no-dependencies Python extractor, validation tests, a generated offline Lua database, a tiny WoW: Forever tooltip addon and an optional Glimpse import bridge. This is **code ready for an authenticated sync**, not a claim that the real ForeverDB records have already been downloaded. No secrets are stored in the repository.
+The project now includes a no-dependencies Python extractor, validation tests, a generated offline Lua database, a tiny WoW: Forever tooltip addon and an optional Glimpse import bridge. The initial authenticated sync completed successfully on 2026-11-15: 717 creatures, 37 materials and 46 zones. The workflow and tests are available under **Actions**. Future syncs will use the private API key stored in GitHub Actions secrets. No secrets are stored in the repository.
 
 **Source:** <a href="https://foreverdb.net">Data from ForeverDB.net</a>
 
@@ -102,6 +102,16 @@ The first command prints only **field names** to confirm the current API structu
 Alternatively, set a private GitHub Actions repository secret called `FOREVERDB_API_KEY` under **Settings → Secrets and variables → Actions**. Then open **Actions → Refresh ForeverDB skinning data → Run workflow**. The workflow runs tests, fetches records using the secret, and commits **normalized data only** if valid. It is manual rather than scheduled to avoid unwanted API use.
 
 The personal-use API key is used only in a private build-time HTTP request, never in the public GitHub Pages site or the client addon. Data is refreshed manually and bundled offline.
+
+### Latest generated data
+
+- [skinning.json](generated/skinning.json): canonical, normalized offline source for future addon exporters
+- [LocalizedGatheringDB/Data.lua](LocalizedGatheringDB/Data.lua): bundled in-game lookup table
+- [Verified successful sync run](https://github.com/sumatkn/localized-WoWforever-GatheringDB/actions/runs/43726812407)
+
+The API presently supplies possible skinning materials, creature levels, skill requirements and zones. Its `gives` entries supply item IDs and names; these are not measured drop counts. The native tooltip addon uses these relationships, while Glimpse's drop-probability importer deliberately declines to invent counts. The live import has **not** been verified in the game client.
+
+To install the standalone addon, download the repository ZIP from GitHub and copy **only the `LocalizedGatheringDB` directory** (containing the `.toc` and Lua files) into your WoW: Forever `Interface/AddOns` directory, then restart the game. Run `/lgdb stats` to confirm the current record counts.
 
 ### In-game tooltips
 
