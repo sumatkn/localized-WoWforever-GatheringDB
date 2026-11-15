@@ -361,6 +361,21 @@ def run():
             print("Zone keys:", list(content) if isinstance(content, dict) else type(content).__name__)
             print("Beast count:", len(collect_beasts(probe)))
             print("First beast keys:", list(collect_beasts(probe)[0]) if collect_beasts(probe) else [])
+            zone_entries = list_at(content, ("zones", "areas", "locations"))
+            print("Filtered response zone count:", len(zone_entries))
+            if zone_entries:
+                z0 = zone_entries[0]
+                print("First zone object keys:", list(z0) if isinstance(z0, dict) else type(z0).__name__)
+                if isinstance(z0, dict):
+                    print("First zone beast keys:", list(z0.get("beasts", [{}])[0]) if isinstance(z0.get("beasts"), list) and z0.get("beasts") and isinstance(z0["beasts"][0], dict) else [])
+                    print("First zone nested fields:", {k: ("list of "+str(len(v)) if isinstance(v, list) else type(v).__name__) for k,v in z0.items()})
+            print("ID probe zone matches:", [(zone_identity(z)[0], zone_identity(z)[1]) for z in zone_entries[:3] if isinstance(z, dict)])
+            if ids[next(iter(ids))] and not collect_beasts(probe):
+                nameprobe = client.get("/gathering/skinning", {"zone": ids[next(iter(ids))]})
+                nd = payload_data(nameprobe)
+                print("Name probe top keys:", list(nd) if isinstance(nd, dict) else type(nd).__name__)
+                print("Name probe zones count:", len(list_at(nd, ("zones", "areas", "locations"))))
+                print("Name probe direct beasts count:", len(collect_beasts(nameprobe)))
             return
         zones = []
         ids = sorted(ids.items())
