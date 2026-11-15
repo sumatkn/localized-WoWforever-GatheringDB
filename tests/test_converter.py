@@ -22,6 +22,22 @@ class ConverterTests(unittest.TestCase):
         beasts = collect_beasts(self.fixture["zones"][0]["response"])
         self.assertEqual(len(beasts), 2)
 
+    def test_real_foreverdb_zone_envelope(self):
+        # Live ForeverDB shape: data.zones[0].beasts, rather than data.beasts.
+        response = {"data": {"profession": "skinning", "zones": [{
+            "mapId": 1413, "name": "The Barrens", "beasts": [{
+                "npcId": 50003, "name": "Test Raptor",
+                "minLevel": 13, "maxLevel": 15, "skill": 65,
+                "gives": [{"itemId": 2318, "name": "Light Leather"}]
+            }]
+        }]}}
+        found = collect_beasts(response)
+        self.assertEqual(len(found), 1)
+        data = build_database({}, [(1413, "The Barrens", response)])
+        self.assertEqual(data["stats"]["creatures"], 1)
+        self.assertEqual(data["creatures"]["50003"]["skinningSkill"], 65)
+        self.assertEqual(data["items"]["2318"]["creatures"], [50003])
+
     def test_material_does_not_fabricate_counts(self):
         self.assertIsNone(parse_material({"itemId": 2318, "name": "Light Leather"})["observed"])
 
