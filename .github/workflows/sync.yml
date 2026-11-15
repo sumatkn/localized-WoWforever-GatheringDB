@@ -1,6 +1,11 @@
 name: Refresh ForeverDB skinning data
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/sync_foreverdb.py'
+      - '.github/workflows/sync.yml'
 permissions:
   contents: write
 jobs:
