@@ -4,6 +4,10 @@ A proposed lightweight, localized/offline gathering database for **World of Warc
 
 **Status (2026-11-15):** ForeverDB API access approved and first live sync **successful**. The repository now contains **717 creature records and 37 material IDs across 46 zones**. The generated data is available as [normalized JSON](generated/skinning.json) and [offline WoW Lua](LocalizedGatheringDB/Data.lua). In-game behavior is not yet independently verified.
 
+## Database architecture (planned v0.2)
+
+The accepted architectural design is documented in **[ResourceDB Database Architecture](docs/DATABASE_ARCHITECTURE.md)**. It defines the protected ForeverDB baseline (updated only by validated official pulls), independent addon source layers, a reproducible materialized merge, selectable local import/export adapters, provenance, conflict handling, and protection against feedback loops or upstream writes. The existing tooltip functionality remains in place; its development is paused during the database-manager pivot. The architecture is a **design specification, not a claim that the database manager is implemented**.
+
 ## Public project page
 
 This repository contains a GitHub Pages-ready static landing page at [`docs/index.html`](docs/index.html). To publish it, configure **Settings → Pages → Deploy from a branch → `main` / `/docs`**.
